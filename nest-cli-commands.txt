@@ -1,0 +1,54 @@
+----------------------------------------------------------------
+generar nuevos modulos
+----------------------------------------------------------------
+-> nest generate module users
+-> nest generate module products
+
+----------------------------------------------------------------
+para enviar una variable de entorno por 'process.env.NODE_ENV'
+----------------------------------------------------------------
+-> NODE_ENV=prod npm run start:dev
+-> env:NODE_ENV = 'prod'; npm run start:dev
+
+----------------------------------------------------------------
+global module
+----------------------------------------------------------------
+Un modulo global será instanciado en todos los demás módulos si que nosotros
+tengamos que hacerlo explícitamente.
+Creando un modulo global
+
+Para ello creamos un modulo
+
+->  nest g mo database
+
+Al modulo le agregaremos el decorador global
+
+/*
+...
+@Global() // Aqui
+@Module({})
+export class DatabaseModule  {}
+
+*/
+
+Ahora podemos agregar todos los controladores, modulos y providers que necesitemos
+y agregaremos el modulo global al app.module.ts
+
+/*
+// src/app.module.ts
+...
+import { DatabaseModule } from './database/database.module';
+
+@Module({
+  imports: [
+    ...
+    DatabaseModule // 👈 Use DatabaseModule like global Module
+   ],
+  ...
+})
+export class AppModule {}
+*/
+
+Listo, ahora podremos usar todos los controladores, modulos y providers que
+fueron declarados en el modulo global sin tener que instanciar el modulo
+DatabaseModule en los modulos que se requieran
